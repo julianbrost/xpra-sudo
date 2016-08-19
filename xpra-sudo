@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SSH_HELPER="${0}-ssh"
+
+argv=()
+
+for arg; do
+	argv+=("$(printf "%s" "$arg" | sed 's/^sudo:\([^:]*\):\([^:]*\)$/ssh:\1@localhost+sudo:\2/')")
+done
+
+exec xpra --ssh="$SSH_HELPER" "${argv[@]}"

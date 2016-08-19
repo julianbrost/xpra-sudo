@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -eu
+
+use_sudo=
+target_user=
+
+while [[ $1 == -* ]]; do
+	if [ "$1" = "-T" ] && [ "$2" = "localhost+sudo" ]; then
+		use_sudo=y
+	fi
+	if [ "$1" = "-l" ]; then
+		target_user="$2"
+	fi
+	shift 2
+done
+
+if [ "$use_sudo" = "y" ]; then
+	cd /
+	# Archlinux uses Xorg.wrap which somewhat breaks but using the actual Xorg
+	# binary works just fine...
+	exec env -i sudo --login -u "$target_user" -- \
+		/bin/sh -c 'PATH="/usr/lib/xorg-server:$PATH"'" $*"
+fi
+
+exit 1
