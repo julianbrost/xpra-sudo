@@ -19,6 +19,9 @@ if [ "$use_sudo" = "y" ]; then
 	cd /
 	# Archlinux uses Xorg.wrap which somewhat breaks but using the actual Xorg
 	# binary works just fine...
+	# Shellcheck complains that "Expressions don't expand in single quotes" but
+	# that's exactly what we want here, so silence it.
+	# shellcheck disable=SC2016
 	exec env -i sudo --login -u "$target_user" -- \
 		/bin/sh -c 'PATH="/usr/lib/xorg-server:$PATH"'" $*"
 fi
